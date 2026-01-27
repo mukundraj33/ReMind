@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "query": "plus",
+      "answer": "Precisely! You'd be adding them up, one by one, or perhaps in groups. Now, imagine those grains were flowing into a container at a varying rate. If you wanted to know the total number of grains in the container after a certain amount of time, and the rate of flow wasn't constant, would simply adding up discrete counts still be the best approach?",
+      "level": 1,
+      "last_reviewed": "2026-01-28T01:56:20.192480"
+    }
+  ]
+}
