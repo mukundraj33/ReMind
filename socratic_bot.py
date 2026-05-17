@@ -7,13 +7,30 @@ from datetime import datetime
 
 # ---------------- SETUP ----------------
 load_dotenv()
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 MODEL_NAME = "gemini-2.5-flash-lite"
 DATA_FILE = "socratic_history.json"
 
 st.set_page_config(page_title="Socratic Bot", layout="centered")
 st.title("Socratic Chatbot (Persistent JSON History)")
 st.caption("I respond only with guiding questions unless you explicitly ask for a direct answer.")
+
+
+def get_api_key():
+    try:
+        return st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+    except Exception:
+        return os.getenv("GEMINI_API_KEY")
+
+
+api_key = get_api_key()
+if not api_key:
+    st.error(
+        "GEMINI_API_KEY is not configured. Add it in Streamlit Cloud under "
+        "App settings > Secrets, or set it in a local .env file."
+    )
+    st.stop()
+
+client = genai.Client(api_key=api_key)
 
 # ---------------- SOCratic PROMPT ----------------
 SYSTEM_PROMPT = """

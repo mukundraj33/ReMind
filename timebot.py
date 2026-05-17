@@ -10,12 +10,28 @@ QUIZ_DELAY_MINUTES = 10
 st.set_page_config(page_title="TimeBot", layout="centered")
 load_dotenv()
 
-API_KEY = os.getenv("GEMINI_API_KEY")
-client = genai.Client(api_key=API_KEY)
 MODEL = "gemini-2.5-flash-lite"
 
 st.title("TimeBot ⏱️")
 st.caption("Quiz after a fixed time delay")
+
+
+def get_api_key():
+    try:
+        return st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+    except Exception:
+        return os.getenv("GEMINI_API_KEY")
+
+
+API_KEY = get_api_key()
+if not API_KEY:
+    st.error(
+        "GEMINI_API_KEY is not configured. Add it in Streamlit Cloud under "
+        "App settings > Secrets, or set it in a local .env file."
+    )
+    st.stop()
+
+client = genai.Client(api_key=API_KEY)
 
 
 ss = st.session_state

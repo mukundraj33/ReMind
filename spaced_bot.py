@@ -7,13 +7,30 @@ from datetime import datetime, timedelta
 
 # ---------------- SETUP ----------------
 load_dotenv()
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 MODEL_NAME = "gemini-2.5-flash-lite"
 DATA_FILE = "spaced_history.json"
 
 st.set_page_config(page_title="Spaced Repetition Bot", layout="centered")
 st.title("Spaced Repetition Learning Bot")
 st.caption("Stores questions with levels and schedules reviews using spaced repetition.")
+
+
+def get_api_key():
+    try:
+        return st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+    except Exception:
+        return os.getenv("GEMINI_API_KEY")
+
+
+api_key = get_api_key()
+if not api_key:
+    st.error(
+        "GEMINI_API_KEY is not configured. Add it in Streamlit Cloud under "
+        "App settings > Secrets, or set it in a local .env file."
+    )
+    st.stop()
+
+client = genai.Client(api_key=api_key)
 
 # ---------------- JSON STORAGE ----------------
 def load_data():

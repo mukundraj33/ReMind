@@ -201,3 +201,16 @@ In Re-Mind:
 - Enabling **multi-user authentication** to support personalized learning across devices.
 
 ---
+
+## Streamlit Cloud Deployment
+
+This app needs a Gemini API key in Streamlit Cloud secrets. A local `.env`
+file is only used when running on your machine.
+
+In Streamlit Cloud, open your app settings, go to **Secrets**, and add:
+
+```toml
+GEMINI_API_KEY = "your_api_key_here"
+```
+
+The repository includes `runtime.txt` to deploy on Python 3.12.

@@ -13,7 +13,6 @@ from datetime import datetime, timedelta
 
 # ---------------- SETUP ----------------
 load_dotenv()
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 MODEL_NAME = "gemini-2.5-flash-lite"
 
 CHAT_FILE = "creative_chat.json"
@@ -22,6 +21,24 @@ SRS_FILE = "creative_srs.json"
 st.set_page_config(page_title="Creative Learning Bot", layout="wide")
 st.title("Creative Learning System")
 st.caption("Socratic learning + memory + revision + quiz engine")
+
+
+def get_api_key():
+    try:
+        return st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+    except Exception:
+        return os.getenv("GEMINI_API_KEY")
+
+
+api_key = get_api_key()
+if not api_key:
+    st.error(
+        "GEMINI_API_KEY is not configured. Add it in Streamlit Cloud under "
+        "App settings > Secrets, or set it in a local .env file."
+    )
+    st.stop()
+
+client = genai.Client(api_key=api_key)
 
 # ---------------- STORAGE ----------------
 def load_json(path, default):
